@@ -22,4 +22,4 @@ npm install -g @vue/cli
 #### Execute project
 ```bash
 npm run serve
-```bash
+```
