@@ -6,7 +6,7 @@ This project it's a web site where the clientes can mount the pizza like they wa
 
 ### How to...
 
-#### Install node [Ubunto]
+#### Install node [Ubuntu]
 ```bash
 curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 ```
