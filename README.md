@@ -1,19 +1,26 @@
-# farelapizza
+# Fare la pizza
+![Easiest-Pizza](https://user-images.githubusercontent.com/51807226/208324045-4541a8e2-14cc-4b11-ae41-faa86eab7c5e.jpg)
 
-## Project setup
-```
-npm install
+## Vue project 
+This project it's a web site where the clientes can mount the pizza like they want
+
+### How to...
+
+#### Install node [Ubuntu]
+```bash
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 ```
 
-### Compiles and hot-reloads for development
+```bash
+sudo apt-get install -y nodejs
 ```
+
+#### Install Vue CLI
+```bash
+npm install -g @vue/cli
+```
+
+#### Execute project
+```bash
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
