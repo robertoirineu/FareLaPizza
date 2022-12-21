@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>Componente de mensagem</p>
+        <Message :mensagem="msg" v-show="msg"/>
         <div>
             <form id="pizza-form" @submit="createPizza($event)">
                 <div class="input-container">
@@ -43,62 +43,72 @@
 </template>
 
 <script>
+    import Message from "./Message.vue"
+
     export default{
-    name:"PizzaForm",
-    data(){
-        return{
-            massas: null,
-            bordas: null,
-            opcionaisdata: null,
-            name: null,
-            massa: null,
-            borda: null,
-            opcionais: [],
-            msg: null
-        }
-    },
+        components:{
+            Message
+        }, 
 
-    methods:{
-        async getIngredintes(){
-            const req = await fetch('http://localhost:3000/ingredientes');
-            const data = await req.json();
-
-            this.massas = data.massas;
-            this.bordas = data.bordas;
-            this.opcionaisdata = data.opcionais;
+        name:"PizzaForm",
+        data(){
+            return{
+                massas: null,
+                bordas: null,
+                opcionaisdata: null,
+                name: null,
+                massa: null,
+                borda: null,
+                opcionais: [],
+                msg: null
+            }
         },
 
-        async createPizza(e){
-            e.preventDefault();
-            const data = {
-                name: this.name,
-                massa: this.massa,
-                borda: this.borda,
-                opcionais: Array.from(this.opcionais),
-                status: "Solicitado"
-            };
+        methods:{
+            async getIngredintes(){
+                const req = await fetch('http://localhost:3000/ingredientes');
+                const data = await req.json();
 
-            const dataJson = JSON.stringify(data);
+                this.massas = data.massas;
+                this.bordas = data.bordas;
+                this.opcionaisdata = data.opcionais;
+            },
 
-            const req = await fetch("http://localhost:3000/pizzas",{
-                method:"POST",
-                headers: {"Content-type":"application/json"},
-                body: dataJson
-            });
+            async createPizza(e){
+                e.preventDefault();
+                const data = {
+                    name: this.name,
+                    massa: this.massa,
+                    borda: this.borda,
+                    opcionais: Array.from(this.opcionais),
+                    status: "Solicitado"
+                };
 
-            const res = await req.json();
-            this.name = ""
-            this.massa = ""
-            this.borda = ""
-            this.opcionais = [],
-            this.status = ""
+                const dataJson = JSON.stringify(data);
 
+                const req = await fetch("http://localhost:3000/pizzas",{
+                    method:"POST",
+                    headers: {"Content-type":"application/json"},
+                    body: dataJson
+                });
+
+                const res = await req.json();
+
+                this.msg = `Pedido Nº ${res.id} realizado! ;) `;
+
+                setTimeout(() => this.msg = "", 3000);
+                this.name = ""
+                this.massa = ""
+                this.borda = ""
+                this.opcionais = [],
+                this.status = ""
+
+            }
+        },
+
+        mounted(){
+            this.getIngredintes();
         }
-    },
-
-    mounted(){
-        this.getIngredintes();
-    }
 }
 
 </script>
