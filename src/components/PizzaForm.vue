@@ -2,7 +2,7 @@
     <div>
         <p>Componente de mensagem</p>
         <div>
-            <form id="pizza-form" >
+            <form id="pizza-form" @submit="createPizza($event)">
                 <div class="input-container">
                     <label for="name">Nome do cliente: </label>
                     <input type="text" id="name" name="name" v-model="name" placeholder="Digite o seu nome" />
@@ -11,33 +11,27 @@
                 <div class="input-container">
                     <label for="borda">Escolha a borda:</label>
                     <select name="borda" id="borda" v-model="borda">
-                        <option value="">Selecione o tipo de borda</option>
-                        <option value="SemBorda">Sem borda</option>
+                        <option v-for="borda in bordas" :key="borda.id" :value="borda.tipo">
+                            {{borda.tipo}}
+                        </option>
                     </select>
                 </div>
               
                 <div class="input-container">
                     <label for="massa">Escolha a massa:</label>
-                    <select name="massa" id="massa" v-model="pao">
-                        <option value="">Escolha o tipo de massa</option>
-                        <option value="Fina">Fina</option>
+                    <select name="massa" id="massa" v-model="massa">
+                        <option v-for="massa in massas" :key="massa.id" :value="massa.tipo">
+                            {{massa.tipo}}
+                        </option>
                     </select>
                 </div>
                 
                 <div id="opcionais-container" class="input-container">
                     <label for="opcionais" id="opcionais-title">Selecione os opcionais:</label>
-                    <div class="check-box-container">
-                        <input type="checkbox" id="opcionais" name="opcionais" v-model="opcionais" value="Salame"/>
-                        <span>Calabresa</span>
-                    </div>
-                    <div class="check-box-container">
-                        <input type="checkbox" id="opcionais" name="opcionais" v-model="opcionais" value="Salame"/>
-                        <span>Oregano</span>
-                    </div>
-                    <div class="check-box-container">
-                        <input type="checkbox" id="opcionais" name="opcionais" v-model="opcionais" value="Salame"/>
-                        <span>Cebola</span>
-                    </div>
+                    <div class="check-box-container" v-for="option in opcionaisdata" :key="option.id">
+                        <input type="checkbox" id="opcionais" name="opcionais" v-model="opcionais" :value="option.tipo"/>
+                        <span>{{option.tipo}}</span>
+                    </div>                    
                 </div>
                 <div class="input-container">
                     <input type="submit" class="submit-btn" value="Criar minha pizza" /> 
@@ -51,8 +45,62 @@
 <script>
     export default{
     name:"PizzaForm",
+    data(){
+        return{
+            massas: null,
+            bordas: null,
+            opcionaisdata: null,
+            name: null,
+            massa: null,
+            borda: null,
+            opcionais: [],
+            msg: null
+        }
+    },
 
+    methods:{
+        async getIngredintes(){
+            const req = await fetch('http://localhost:3000/ingredientes');
+            const data = await req.json();
+
+            this.massas = data.massas;
+            this.bordas = data.bordas;
+            this.opcionaisdata = data.opcionais;
+        },
+
+        async createPizza(e){
+            e.preventDefault();
+            const data = {
+                name: this.name,
+                massa: this.massa,
+                borda: this.borda,
+                opcionais: Array.from(this.opcionais),
+                status: "Solicitado"
+            };
+
+            const dataJson = JSON.stringify(data);
+
+            const req = await fetch("http://localhost:3000/pizzas",{
+                method:"POST",
+                headers: {"Content-type":"application/json"},
+                body: dataJson
+            });
+
+            const res = await req.json();
+            this.name = ""
+            this.massa = ""
+            this.borda = ""
+            this.opcionais = [],
+            this.status = ""
+
+        }
+    },
+
+    mounted(){
+        this.getIngredintes();
+    }
 }
+
 </script>
 
 <style scoped>

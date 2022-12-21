@@ -1,5 +1,5 @@
 <template>
-  <Navbar :logo="logo_src" :alt="alt_nema" />
+  <Navbar :logo="logo_src" :alt="alt_name" />
   <router-view/>
   <Footer />
 </template>
@@ -15,6 +15,7 @@
     },
     data(){
       return{
+          alt_name: "Fare la pizza",
          logo_src: "/img/logo.png",
          app_name: "Faça sua pizza"
       }
