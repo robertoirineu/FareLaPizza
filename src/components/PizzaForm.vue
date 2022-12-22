@@ -95,8 +95,8 @@
                 const res = await req.json();
 
                 this.msg = `Pedido Nº ${res.id} realizado! ;) `;
-
                 setTimeout(() => this.msg = "", 3000);
+                
                 this.name = ""
                 this.massa = ""
                 this.borda = ""
